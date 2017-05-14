@@ -1,5 +1,8 @@
 # PSync
 
+## V2 is on the way!
+I'm taking back over development from the original release under Flipboard, and V2 will be a major internal rewrite of this project for more stability and new features. Stay tuned!
+
 PSync is a gradle plugin for android projects to generate Java representations of xml preferences.
 
 Some applications have a lot of preferences, each their own keys, default values, and more. These tend to be
@@ -10,7 +13,7 @@ We got tired of dealing with this at Flipboard. Our preference class ended up wi
 at the top that we manually had to keep in sync, and it was becoming a nuisance. PSync was developed
 to resolve this, and we hope it helps you too!
 
-## Setup
+### Setup
 
 Apply the PSync plugin to your module *below* your android plugin application
 
@@ -62,7 +65,7 @@ Library projects **MUST** specify this, since they don't have `applicationId` va
 **generateRx** is a flag indicating whether or not you want code generated for usage with [Rx-Preferences](https://github.com/f2prateek/rx-preferences),
 which is a great library that adds reactive bindings around SharedPreferences
 
-## Usage
+### Usage
 
 Using the generated file is easy, and should feel very familiar to how you would use `R.java`.
 
@@ -197,9 +200,3 @@ P.serverUrl.rx().asObservable().omgDoRxStuff!
 ```
 
 Easy peasy. Enjoy!
-
-## Contributing
-We welcome pull requests for bug fixes, new features, and improvements to PSync. Contributors
-to PSync repository must accept Flipboard's Apache-style
-[Individual Contributor License Agreement (CLA)](https://docs.google.com/forms/d/1gh9y6_i8xFn6pA15PqFeye19VqasuI9-bGp_e0owy74/viewform)
-before any changes can be merged.
