@@ -1,0 +1,65 @@
+def versions = [
+    androidTest: '0.5',
+    errorProne: '2.0.19',
+    kotlin: '1.1.2',
+    support: '25.3.1'
+]
+
+def build = [
+    buildToolsVersion: '25.0.3',
+    compileSdkVersion: 25,
+    ci: 'true' == System.getenv('CI'),
+    minSdkVersion: 14,
+    targetSdkVersion: 25,
+    errorProne: "com.google.errorprone:error_prone_core:${versions.errorProne}",
+
+    repositories: [
+        plugins: 'https://plugins.gradle.org/m2/'
+    ],
+
+    gradlePlugins: [
+        android: 'com.android.tools.build:gradle:2.3.2',
+        errorProne: 'net.ltgt.gradle:gradle-errorprone-plugin:0.0.10',
+        psync: 'gradle.plugin.com.flipboard:psync:1.1.5',
+        kotlin: "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}"
+    ]
+]
+
+def kotlin = [
+    stdlib: "org.jetbrains.kotlin:kotlin-stdlib:${versions.kotlin}"
+]
+
+def misc = [
+    commonsLang3: 'org.apache.commons:commons-lang3:3.4',
+    errorProneAnnotations: "com.google.errorprone:error_prone_annotations:${versions.errorProne}",
+    guava: 'com.google.guava:guava:21.0',
+    javapoet: 'com.squareup:javapoet:1.7.0',
+    jsr305: 'com.google.code.findbugs:jsr305:3.0.2'
+]
+
+def rx = [
+    android: 'io.reactivex.rxjava2:rxandroid:2.0.1',
+    groovy: 'io.reactivex:rxgroovy:1.0.0',
+    java: 'io.reactivex.rxjava2:rxjava:2.1.0'
+]
+
+def support = [
+    annotations: "com.android.support:support-annotations:${versions.support}"
+]
+
+def test = [
+    androidRunner: "com.android.support.test:runner:${versions.androidTest}",
+    androidRules: "com.android.support.test:rules:${versions.androidTest}",
+    junit: 'junit:junit:4.12',
+    truth: 'com.google.truth:truth:0.32'
+]
+
+ext.deps = [
+    "build": build,
+    "kotlin": kotlin,
+    "misc": misc,
+    "rx": rx,
+    "support": support,
+    "test": test,
+    "versions": versions
+]

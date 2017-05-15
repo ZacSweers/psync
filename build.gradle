@@ -1,64 +1,13 @@
-buildscript {
-    repositories {
-        jcenter()
-        maven {
-            url "https://plugins.gradle.org/m2/"
+subprojects {
+    buildscript {
+        repositories {
+            jcenter()
         }
     }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.2'
-        classpath "com.gradle.publish:plugin-publish-plugin:0.9.1"
-        classpath "gradle.plugin.com.flipboard:psync:1.1.5"
-    }
-}
 
-allprojects {
     repositories {
         jcenter()
     }
-}
-
-ext {
-    VERSION = version()
-}
-
-task bumpMajor << {
-    ant.propertyfile(file: 'version.properties') {
-        entry(key: 'major', type: 'int', operation: '+', value: 1)
-        entry(key: 'minor', type: 'int', operation: '=', value: 0)
-        entry(key: 'patch', type: 'int', operation: '=', value: 0)
-    }
-}
-
-task bumpMinor << {
-    ant.propertyfile(file: 'version.properties') {
-        entry(key: 'minor', type: 'int', operation: '+', value: 1)
-        entry(key: 'patch', type: 'int', operation: '=', value: 0)
-    }
-}
-
-task bumpPatch << {
-    ant.propertyfile(file: 'version.properties') {
-        entry(key: 'patch', type: 'int', operation: '+', value: 1)
-    }
-}
-
-task genReadMe << {
-    def template = file('README.md.template').text
-    def result = template.replaceAll("%%version%%", version())
-    file("README.md").withWriter{ it << result }
-}
-
-task version << {
-    println version()
-}
-
-def String version() {
-    def versionPropsFile = file('version.properties')
-    def Properties versionProps = new Properties()
-    versionProps.load(new FileInputStream(versionPropsFile))
-
-    return versionProps['major'] + "." + versionProps['minor'] + "." + versionProps['patch']
 }
 
 task wrapper(type: Wrapper) {
@@ -69,3 +18,5 @@ task wrapper(type: Wrapper) {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+apply from: 'gradle/dependencies.gradle'
