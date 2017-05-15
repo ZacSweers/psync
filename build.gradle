@@ -6,7 +6,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.5.0'
+        classpath 'com.android.tools.build:gradle:2.3.2'
         classpath "com.gradle.publish:plugin-publish-plugin:0.9.1"
         classpath "gradle.plugin.com.flipboard:psync:1.1.5"
     }
@@ -59,4 +59,13 @@ def String version() {
     versionProps.load(new FileInputStream(versionPropsFile))
 
     return versionProps['major'] + "." + versionProps['minor'] + "." + versionProps['patch']
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.5'
+    distributionUrl = "https://services.gradle.org/distributions/gradle-$gradleVersion-all.zip"
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
 }
