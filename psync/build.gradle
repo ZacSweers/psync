@@ -23,9 +23,7 @@ dependencies {
   compile deps.misc.javapoet
   compile deps.misc.commonsLang3
   compile deps.misc.guava
-  compile(deps.rx.groovy) {
-    exclude module: "groovy-all"
-  }
+  compile deps.rx.java
   testCompile deps.test.junit
   testCompile deps.test.truth
 }
