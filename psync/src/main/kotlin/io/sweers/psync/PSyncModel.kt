@@ -3,7 +3,7 @@ package io.sweers.psync
 /**
  * Configuration values for the PSync plugin.
  */
-class PSyncModel {
+open class PSyncModel {
 
   /**
    * Ant-style includes pattern for identifying what files you want to include in the XML parsing.

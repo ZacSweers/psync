@@ -1,31 +1,38 @@
 buildscript {
+  try {
+    apply from: rootProject.file('gradle/dependencies.gradle')
+  } catch (Exception ignored) {
+    apply from: rootProject.file('../gradle/dependencies.gradle')
+  }
   repositories {
     jcenter()
     maven { url deps.build.repositories.plugins }
   }
   dependencies {
     classpath deps.build.gradlePlugins.kotlin
-    classpath deps.build.gradlePlugins.errorProne
   }
 }
 
 apply plugin: 'kotlin'
-apply plugin: 'groovy'
-apply plugin: 'net.ltgt.errorprone'
+
+repositories {
+  jcenter()
+  maven { url "https://maven.google.com/" }
+}
 
 dependencies {
-  errorprone deps.build.errorProne
-  compile gradleApi()
-  compile localGroovy()
-  compile deps.kotlin.stdlib
-  compile deps.build.gradlePlugins.android
-  compile 'com.google.android:android:4.1.1.4'
-  compile deps.misc.javapoet
-  compile deps.misc.commonsLang3
-  compile deps.misc.guava
-  compile deps.rx.java
+  implementation gradleApi()
+  implementation deps.kotlin.stdlib
+  implementation deps.build.gradlePlugins.android
+  implementation 'com.google.android:android:4.1.1.4'
+  implementation deps.misc.javapoet
+  implementation deps.misc.guava
+  implementation deps.rx.java
   testCompile deps.test.junit
   testCompile deps.test.truth
 }
 
-apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
+boolean isBuildSrc = rootProject.rootDir.absolutePath.concat("buildSrc")
+if (!isBuildSrc) {
+  apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
+}
