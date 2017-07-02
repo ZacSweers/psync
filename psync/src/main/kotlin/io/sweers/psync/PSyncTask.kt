@@ -245,9 +245,22 @@ open class PSyncTask : SourceTask() {
     pClass.addMethod(MethodSpec.methodBuilder("init")
         .addModifiers(*MODIFIERS)
         .addJavadoc(
-            "Initializer that takes a {@link Context} for resource resolution. This should be an Application context instance, and will retrieve default shared preferences.\n")
+            "Initializer that takes a {@link Context} for resource resolution. This will retrieve default shared preferences.\n")
         .addParameter(
             ParameterSpec.builder(Context::class.java, "context", Modifier.FINAL)
+                .build())
+        .addStatement("init(context, true)")
+        .build())
+
+    pClass.addMethod(MethodSpec.methodBuilder("init")
+        .addModifiers(*MODIFIERS)
+        .addJavadoc(
+            "Initializer that takes a {@link Context} for resource resolution. This will retrieve default shared preferences if {@link autoCreateSharedPrefs} is true.\n")
+        .addParameter(
+            ParameterSpec.builder(Context::class.java, "context", Modifier.FINAL)
+                .build())
+        .addParameter(
+            ParameterSpec.builder(TypeName.BOOLEAN, "autoCreateSharedPrefs", Modifier.FINAL)
                 .build())
         .beginControlFlow("if (context == null)")
         .addStatement("throw new \$T(\$S)",
@@ -256,10 +269,12 @@ open class PSyncTask : SourceTask() {
         .endControlFlow()
         .addStatement("\$T applicationContext = context.getApplicationContext()", Context::class.java)
         .addStatement("RESOURCES = applicationContext.getResources()")
+        .beginControlFlow("if (autoCreateSharedPrefs)")
         .addStatement("// Sensible default")
         .addStatement(
             "setSharedPreferences(\$T.getDefaultSharedPreferences(applicationContext))",
             PreferenceManager::class.java)
+        .endControlFlow()
         .build())
 
     val setSharedPreferencesBuilder = MethodSpec.methodBuilder("setSharedPreferences")
