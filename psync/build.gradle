@@ -28,6 +28,7 @@ dependencies {
   implementation deps.misc.javapoet
   implementation deps.misc.guava
   implementation deps.rx.java
+  implementation deps.support.annotations
   testCompile deps.test.junit
   testCompile deps.test.truth
 }

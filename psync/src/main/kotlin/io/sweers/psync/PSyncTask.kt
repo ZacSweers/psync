@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Resources
 import android.preference.PreferenceManager
+import android.support.annotation.Nullable
 import com.google.common.base.CaseFormat
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
@@ -280,9 +281,25 @@ open class PSyncTask : SourceTask() {
         .addStatement("PREFERENCES = sharedPreferences")
 
     if (generateRx) {
-      setSharedPreferencesBuilder.addStatement(
-          "RX_PREFERENCES = \$T.create(PREFERENCES)",
-          CN_RX_PREFERENCES)
+      pClass.addMethod(MethodSpec.methodBuilder("setSharedPreferences")
+          .addModifiers(*MODIFIERS)
+          .addParameter(ParameterSpec.builder(SharedPreferences::class.java,
+              "sharedPreferences",
+              Modifier.FINAL)
+              .build())
+          .addStatement("setSharedPreferences(sharedPreferences, null)")
+          .build())
+      setSharedPreferencesBuilder
+          .addParameter(ParameterSpec.builder(CN_RX_PREFERENCES, "rxPreferences")
+              .addAnnotation(Nullable::class.java)
+              .build())
+          .beginControlFlow("if (rxPreferences == null)")
+          .addStatement(
+              "RX_PREFERENCES = \$T.create(PREFERENCES)",
+              CN_RX_PREFERENCES)
+          .nextControlFlow("else")
+          .addStatement("RX_PREFERENCES = rxPreferences")
+          .endControlFlow()
     }
 
     pClass.addMethod(setSharedPreferencesBuilder.build())
