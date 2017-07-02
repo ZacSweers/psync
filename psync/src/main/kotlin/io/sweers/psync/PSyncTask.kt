@@ -172,9 +172,9 @@ open class PSyncTask : SourceTask() {
     return PrefEntry(key, resId, resType)
   }
 
-  private val CN_RX_PREFERENCES = ClassName.get("com.f2prateek.rx.preferences",
+  private val CN_RX_PREFERENCES = ClassName.get("com.f2prateek.rx.preferences2",
       "RxSharedPreferences")
-  private val CN_RX_PREFERENCE = ClassName.get("com.f2prateek.rx.preferences", "Preference")
+  private val CN_RX_PREFERENCE = ClassName.get("com.f2prateek.rx.preferences2", "Preference")
   private val MODIFIERS = arrayOf(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
   private val COULD_BE_CAMEL = Pattern.compile("[a-zA-Z]+[a-zA-Z0-9]*")
   private val ALL_CAPS = Pattern.compile("[A-Z0-9]*")
