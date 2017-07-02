@@ -32,7 +32,8 @@ dependencies {
   testCompile deps.test.truth
 }
 
-boolean isBuildSrc = rootProject.rootDir.absolutePath.contains("buildSrc")
+File mvnPushFile = rootProject.file('gradle/gradle-mvn-push.gradle')
+boolean isBuildSrc = !mvnPushFile.exists()
 if (!isBuildSrc) {
-  apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
+  apply from: mvnPushFile
 }
