@@ -255,7 +255,7 @@ open class PSyncTask : SourceTask() {
     pClass.addMethod(MethodSpec.methodBuilder("init")
         .addModifiers(*MODIFIERS)
         .addJavadoc(
-            "Initializer that takes a {@link Context} for resource resolution. This will retrieve default shared preferences if {@link autoCreateSharedPrefs} is true.\n")
+            "Initializer that takes a {@link Context} for resource resolution. This will retrieve default shared preferences if {@code autoCreateSharedPrefs} is true.\n")
         .addParameter(
             ParameterSpec.builder(Context::class.java, "context", Modifier.FINAL)
                 .build())
