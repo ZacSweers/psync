@@ -1,6 +1,5 @@
 package io.sweers.psync
 
-import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Resources
@@ -248,18 +247,14 @@ open class PSyncTask : SourceTask() {
         .addJavadoc(
             "Initializer that takes a {@link Context} for resource resolution. This should be an Application context instance, and will retrieve default shared preferences.\n")
         .addParameter(
-            ParameterSpec.builder(Context::class.java, "applicationContext", Modifier.FINAL)
+            ParameterSpec.builder(Context::class.java, "context", Modifier.FINAL)
                 .build())
-        .beginControlFlow("if (applicationContext == null)")
+        .beginControlFlow("if (context == null)")
         .addStatement("throw new \$T(\$S)",
             IllegalStateException::class.java,
-            "applicationContext cannot be null!")
+            "context cannot be null!")
         .endControlFlow()
-        .beginControlFlow("if (!(applicationContext instanceof \$T))", Application::class.java)
-        .addStatement("throw new \$T(\$S)",
-            IllegalArgumentException::class.java,
-            "You may only use an Application instance as context!")
-        .endControlFlow()
+        .addStatement("\$T applicationContext = context.getApplicationContext()", Context::class.java)
         .addStatement("RESOURCES = applicationContext.getResources()")
         .addStatement("// Sensible default")
         .addStatement(
