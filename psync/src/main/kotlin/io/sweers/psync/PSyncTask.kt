@@ -45,10 +45,10 @@ open class PSyncTask : SourceTask() {
    * The output directory.
    */
   @OutputDirectory
-  var outputDir: File = File("placeholder")
+  lateinit var outputDir: File
 
   @Input
-  var packageName: String? = null
+  lateinit var packageName: String
 
   @Input
   var className: String = "P"
@@ -72,14 +72,12 @@ open class PSyncTask : SourceTask() {
 
     val entries = getPrefEntriesFromFiles(getSource()).blockingGet()
 
-    generate(entries, packageName!!, outputDir, className, generateRx)
+    generate(entries, packageName, outputDir, className, generateRx)
   }
 
   /**
    * Retrieves all the keys in the files in a given xml directory
    *
-   * @param xmlDir Directory to search
-   * @param fileRegex Regex for matching the files you want
    * @return Observable of all the distinct keys in this directory.
    */
   fun getPrefEntriesFromFiles(sources: Iterable<File>): Single<List<PrefEntry<*>>> {
@@ -343,7 +341,7 @@ open class PSyncTask : SourceTask() {
         entryClass.addMethod(MethodSpec.methodBuilder("rx")
             .addModifiers(*MODIFIERS)
             .returns(ParameterizedTypeName.get(CN_RX_PREFERENCE, TypeName.get(referenceType)))
-            .addStatement("return RX_PREFERENCES.get\$N(key)", referenceType.simpleName)
+            .addStatement("return RX_PREFERENCES.get\$N(KEY)", referenceType.simpleName)
             .build())
       }
     }
@@ -429,9 +427,9 @@ open class PSyncTask : SourceTask() {
     }
 
     if (isGetter) {
-      return "get$simpleName(key, $defaultValue)"
+      return "get$simpleName(KEY, $defaultValue)"
     } else {
-      return "put$simpleName(key, val)"
+      return "put$simpleName(KEY, val)"
     }
   }
 }

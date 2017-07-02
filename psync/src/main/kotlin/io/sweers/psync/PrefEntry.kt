@@ -125,7 +125,7 @@ class PrefEntry<T : Any>(var key: String,
       }
     }
 
-    resourceDefaultValueGetterStmt = String.format(statement, "defaultResId")
+    resourceDefaultValueGetterStmt = String.format(statement, "DEFAULT_RES_ID")
   }
 
   override fun toString(): String {

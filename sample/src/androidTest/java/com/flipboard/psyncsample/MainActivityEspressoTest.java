@@ -2,7 +2,8 @@ package com.flipboard.psyncsample;
 
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-
+import io.sweers.psyncsample.MainActivity;
+import io.sweers.psyncsample.R;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
