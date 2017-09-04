@@ -1,12 +1,12 @@
 def versions = [
     androidTest: '0.5',
-    errorProne: '2.0.19',
-    kotlin: '1.1.3',
-    support: '25.4.0'
+    errorProne: '2.1.1',
+    kotlin: '1.1.4-3',
+    support: '26.0.1'
 ]
 
 def build = [
-    buildToolsVersion: '26.0.0',
+    buildToolsVersion: '26.0.1',
     compileSdkVersion: 26,
     ci: 'true' == System.getenv('CI'),
     minSdkVersion: 14,
@@ -18,7 +18,7 @@ def build = [
     ],
 
     gradlePlugins: [
-        android: 'com.android.tools.build:gradle:3.0.0-alpha5',
+        android: 'com.android.tools.build:gradle:3.0.0-beta4',
         errorProne: 'net.ltgt.gradle:gradle-errorprone-plugin:0.0.10',
         psync: 'gradle.plugin.com.flipboard:psync:1.1.5',
         kotlin: "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}"
@@ -51,7 +51,7 @@ def test = [
     androidRunner: "com.android.support.test:runner:${versions.androidTest}",
     androidRules: "com.android.support.test:rules:${versions.androidTest}",
     junit: 'junit:junit:4.12',
-    truth: 'com.google.truth:truth:0.33'
+    truth: 'com.google.truth:truth:0.35'
 ]
 
 ext.deps = [
