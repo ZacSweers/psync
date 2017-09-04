@@ -5,7 +5,6 @@ import android.content.SharedPreferences
 import android.content.res.Resources
 import android.preference.PreferenceManager
 import android.support.annotation.CheckResult
-import android.support.annotation.NonNull
 import android.support.annotation.Nullable
 import com.google.common.base.CaseFormat
 import com.squareup.javapoet.AnnotationSpec
@@ -367,7 +366,6 @@ open class PSyncTask : SourceTask() {
 
       entryClass.addMethod(MethodSpec.methodBuilder("put")
           .addAnnotation(AnnotationSpec.builder(CheckResult::class.java).build())
-          .addAnnotation(AnnotationSpec.builder(NonNull::class.java).build())
           .addModifiers(*MODIFIERS)
           .returns(SharedPreferences.Editor::class.java)
           .addParameter(ParameterSpec.builder(prefType, "val", Modifier.FINAL)
@@ -384,7 +382,6 @@ open class PSyncTask : SourceTask() {
       if (generateRx && referenceType != null) {
         entryClass.addMethod(MethodSpec.methodBuilder("rx")
             .addAnnotation(AnnotationSpec.builder(CheckResult::class.java).build())
-            .addAnnotation(AnnotationSpec.builder(NonNull::class.java).build())
             .addModifiers(*MODIFIERS)
             .returns(ParameterizedTypeName.get(CN_RX_PREFERENCE, TypeName.get(referenceType)))
             .addStatement("return RX_PREFERENCES.get\$N(KEY)", referenceType.simpleName)
