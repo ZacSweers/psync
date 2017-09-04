@@ -56,6 +56,7 @@ open class PSyncTask : SourceTask() {
   @Input
   var generateRx: Boolean = false
 
+  @Suppress("unused")
   @TaskAction
   fun generate(inputs: IncrementalTaskInputs) {
 
@@ -80,7 +81,7 @@ open class PSyncTask : SourceTask() {
    *
    * @return Observable of all the distinct keys in this directory.
    */
-  fun getPrefEntriesFromFiles(sources: Iterable<File>): Single<List<PrefEntry<*>>> {
+  private fun getPrefEntriesFromFiles(sources: Iterable<File>): Single<List<PrefEntry<*>>> {
     return Observable.fromIterable(sources)               // Fetch the keys from each file
         .map { file -> XmlParser().parse(file) }          // Parse the file
         .flatMap { rootNode ->
@@ -102,10 +103,10 @@ open class PSyncTask : SourceTask() {
    * @param attributes attributes on the node to parse
    * @return a generated PrefEntry, or {@link PrefEntry#BLANK} if we can't do anything with it
    */
-  fun generatePrefEntry(attributes: Map<QName, String>): PrefEntry<*> {
-    var entry: PrefEntry<*> by Delegates.notNull<PrefEntry<*>>()
+  private fun generatePrefEntry(attributes: Map<QName, String>): PrefEntry<*> {
+    var entry: PrefEntry<*> by Delegates.notNull()
     var key: String? = null
-    var defaultValue: String = ""
+    var defaultValue = ""
 
     // These are present for list-type preferences
     var entries: String? = null
@@ -160,7 +161,7 @@ open class PSyncTask : SourceTask() {
    * @param defaultValue String representation of the default value (e.g. "@string/hello")
    * @return PrefEntry object representing this, or {@link PrefEntry#BLANK} if we couldn't resolve its resource ID
    */
-  fun generateResourcePrefEntry(key: String, defaultValue: String): PrefEntry<*> {
+  private fun generateResourcePrefEntry(key: String, defaultValue: String): PrefEntry<*> {
     val split = defaultValue.split('/')
 
     if (split.size < 2) {
@@ -191,7 +192,7 @@ open class PSyncTask : SourceTask() {
    * @throws IOException because Java
    */
   @Throws(IOException::class)
-  fun generate(inputKeys: List<PrefEntry<*>>,
+  private fun generate(inputKeys: List<PrefEntry<*>>,
       packageName: String,
       outputDir: File,
       className: String,
@@ -393,7 +394,7 @@ open class PSyncTask : SourceTask() {
     return entryClass.build()
   }
 
-  internal fun camelCaseKey(input: String): String {
+  private fun camelCaseKey(input: String): String {
 
     // Default to lower_underscore, as this is the platform convention
     var format = CaseFormat.LOWER_UNDERSCORE
@@ -431,12 +432,12 @@ open class PSyncTask : SourceTask() {
     if (!clazz.isPrimitive) {
       return clazz
     }
-    when (clazz.simpleName) {
-      "Boolean", "boolean" -> return java.lang.Boolean::class.java
-      "Integer", "int" -> return Integer::class.java
+    return when (clazz.simpleName) {
+      "Boolean", "boolean" -> java.lang.Boolean::class.java
+      "Integer", "int" -> Integer::class.java
       else ->
         // Currently unsupported
-        return null
+        null
     }
   }
 
@@ -445,18 +446,18 @@ open class PSyncTask : SourceTask() {
     val simpleName = entry.valueType!!.simpleName.capitalize()
     if (entry.defaultType == null) {
       // No defaultValue() method will be available
-      when (simpleName) {
-        "Boolean" -> defaultValue = "false"
-        "Int" -> defaultValue = "-1"
-        "String" -> defaultValue = "null"
-        else -> defaultValue = "null"
+      defaultValue = when (simpleName) {
+        "Boolean" -> "false"
+        "Int" -> "-1"
+        "String" -> "null"
+        else -> "null"
       }
     }
 
-    if (isGetter) {
-      return "get$simpleName(KEY, $defaultValue)"
+    return if (isGetter) {
+      "get$simpleName(KEY, $defaultValue)"
     } else {
-      return "put$simpleName(KEY, val)"
+      "put$simpleName(KEY, val)"
     }
   }
 }

@@ -3,8 +3,7 @@ package io.sweers.psync
 /**
  * This represents a preference entry
  *
- *
- * T represents the type of value this preference is backed by, such as a boolean
+ * [T] represents the type of value this preference is backed by, such as a boolean
  */
 class PrefEntry<T : Any>(var key: String,
     var defaultValue: T? = null,
@@ -28,23 +27,28 @@ class PrefEntry<T : Any>(var key: String,
       this.isResource = true
     }
 
-    if (defaultValue == null) {
-      this.defaultType = null
-      this.valueType = null
-    } else if (isResource) {
-      this.defaultType = String::class.java
-      resolveResourceInfo()
-    } else if (defaultValue is Boolean) {
-      this.defaultType = Boolean::class.javaPrimitiveType
-      this.valueType = this.defaultType
-    } else if (defaultValue is Int) {
-      this.defaultType = Int::class.javaPrimitiveType
-      this.valueType = this.defaultType
-    } else if (defaultValue is String) {
-      this.defaultType = String::class.java
-      this.valueType = this.defaultType
-    } else {
-      throw UnsupportedOperationException(
+    when {
+      defaultValue == null -> {
+        this.defaultType = null
+        this.valueType = null
+      }
+      isResource -> {
+        this.defaultType = String::class.java
+        resolveResourceInfo()
+      }
+      defaultValue is Boolean -> {
+        this.defaultType = Boolean::class.javaPrimitiveType
+        this.valueType = this.defaultType
+      }
+      defaultValue is Int -> {
+        this.defaultType = Int::class.javaPrimitiveType
+        this.valueType = this.defaultType
+      }
+      defaultValue is String -> {
+        this.defaultType = String::class.java
+        this.valueType = this.defaultType
+      }
+      else -> throw UnsupportedOperationException(
           "Unsupported type: " + defaultValue!!.javaClass.simpleName)
     }
   }
@@ -85,7 +89,7 @@ class PrefEntry<T : Any>(var key: String,
 
 
   val isBlank: Boolean
-    get() = key.isNullOrBlank()
+    get() = key.isBlank()
 
   // TODO
   // Float

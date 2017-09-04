@@ -28,7 +28,7 @@ class PSyncPlugin : Plugin<Project> {
     }
   }
 
-  fun processVariants(project: Project, psyncModel: PSyncModel,
+  private fun processVariants(project: Project, psyncModel: PSyncModel,
       variants: Iterable<BaseVariant>) {
     val includesPattern = psyncModel.includesPattern
     variants.forEach { variant ->
