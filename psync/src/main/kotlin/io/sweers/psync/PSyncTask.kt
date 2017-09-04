@@ -4,8 +4,11 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Resources
 import android.preference.PreferenceManager
+import android.support.annotation.CheckResult
+import android.support.annotation.NonNull
 import android.support.annotation.Nullable
 import com.google.common.base.CaseFormat
+import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.FieldSpec
@@ -268,7 +271,8 @@ open class PSyncTask : SourceTask() {
             IllegalStateException::class.java,
             "context cannot be null!")
         .endControlFlow()
-        .addStatement("\$T applicationContext = context.getApplicationContext()", Context::class.java)
+        .addStatement("\$T applicationContext = context.getApplicationContext()",
+            Context::class.java)
         .addStatement("RESOURCES = applicationContext.getResources()")
         .beginControlFlow("if (autoCreateSharedPrefs)")
         .addStatement("// Sensible default")
@@ -351,15 +355,27 @@ open class PSyncTask : SourceTask() {
     if (entry.valueType != null || entry.defaultType != null) {
       val prefType = (entry.valueType ?: entry.defaultType)!!
       entryClass.addMethod(MethodSpec.methodBuilder("get")
+          .apply {
+            if (!prefType.isPrimitive) {
+              addAnnotation(AnnotationSpec.builder(Nullable::class.java).build())
+            }
+          }
           .addModifiers(*MODIFIERS)
           .returns(prefType)
           .addStatement("return PREFERENCES.\$N", resolvePreferenceStmt(entry, true))
           .build())
 
       entryClass.addMethod(MethodSpec.methodBuilder("put")
+          .addAnnotation(AnnotationSpec.builder(CheckResult::class.java).build())
+          .addAnnotation(AnnotationSpec.builder(NonNull::class.java).build())
           .addModifiers(*MODIFIERS)
           .returns(SharedPreferences.Editor::class.java)
           .addParameter(ParameterSpec.builder(prefType, "val", Modifier.FINAL)
+              .apply {
+                if (!prefType.isPrimitive) {
+                  addAnnotation(AnnotationSpec.builder(Nullable::class.java).build())
+                }
+              }
               .build())
           .addStatement("return PREFERENCES.edit().\$N", resolvePreferenceStmt(entry, false))
           .build())
@@ -367,6 +383,8 @@ open class PSyncTask : SourceTask() {
       val referenceType = resolveReferenceType(prefType)
       if (generateRx && referenceType != null) {
         entryClass.addMethod(MethodSpec.methodBuilder("rx")
+            .addAnnotation(AnnotationSpec.builder(CheckResult::class.java).build())
+            .addAnnotation(AnnotationSpec.builder(NonNull::class.java).build())
             .addModifiers(*MODIFIERS)
             .returns(ParameterizedTypeName.get(CN_RX_PREFERENCE, TypeName.get(referenceType)))
             .addStatement("return RX_PREFERENCES.get\$N(KEY)", referenceType.simpleName)
