@@ -17,11 +17,11 @@ class PSyncPlugin : Plugin<Project> {
         when (it) {
           is AppPlugin -> {
             processVariants(project, psyncModel,
-                project.extensions.findByType(AppExtension::class.java).applicationVariants)
+                project.extensions.findByType(AppExtension::class.java)!!.applicationVariants)
           }
           is LibraryPlugin -> {
             processVariants(project, psyncModel,
-                project.extensions.findByType(LibraryExtension::class.java).libraryVariants)
+                project.extensions.findByType(LibraryExtension::class.java)!!.libraryVariants)
           }
         }
       }

@@ -34,7 +34,7 @@ fun evaluatableAppProject(): Project {
       }
     }
 
-    buildTypes.findByName("release").signingConfig = signingConfigs.findByName("debug")
+    buildTypes.findByName("release")!!.signingConfig = signingConfigs.findByName("debug")
   }
 
   return project
@@ -56,7 +56,7 @@ fun evaluatableLibProject(): Project {
       }
     }
 
-    buildTypes.findByName("release").signingConfig = signingConfigs.findByName("debug")
+    buildTypes.findByName("release")!!.signingConfig = signingConfigs.findByName("debug")
   }
 
   return project
