@@ -322,7 +322,7 @@ open class PSyncTask : SourceTask() {
   private fun generatePrefBlock(entry: PrefEntry<*>,
       packageName: String,
       generateRx: Boolean): TypeSpec {
-    val entryClass = TypeSpec.classBuilder(camelCaseKey(entry.key))
+    val entryClass = TypeSpec.classBuilder(camelCaseKey(entry.key).capitalize())
         .addModifiers(*MODIFIERS)
     entryClass.addField(FieldSpec.builder(String::class.java, "KEY", *MODIFIERS)
         .initializer("\$S", entry.key)
@@ -384,7 +384,13 @@ open class PSyncTask : SourceTask() {
             .addAnnotation(AnnotationSpec.builder(CheckResult::class.java).build())
             .addModifiers(*MODIFIERS)
             .returns(ParameterizedTypeName.get(CN_RX_PREFERENCE, TypeName.get(referenceType)))
-            .addStatement("return RX_PREFERENCES.get\$N(KEY)", referenceType.simpleName)
+            .apply {
+              if (entry.defaultType != null) {
+                addStatement("return RX_PREFERENCES.get\$N(KEY, defaultValue())", referenceType.simpleName)
+              } else {
+                addStatement("return RX_PREFERENCES.get\$N(KEY)", referenceType.simpleName)
+              }
+            }
             .build())
       }
     }
