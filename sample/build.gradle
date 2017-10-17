@@ -48,12 +48,12 @@ repositories {
 }
 
 dependencies {
-  implementation 'com.android.support:appcompat-v7:25.4.0'
+  implementation 'com.android.support:appcompat-v7:26.1.0'
   implementation 'com.f2prateek.rx.preferences2:rx-preferences:2.0.0-RC2'
 
   errorprone deps.build.errorProne
 
   androidTestImplementation 'com.android.support.test.espresso:espresso-core:2.2.2'
   androidTestImplementation 'com.android.support.test:runner:0.5'
-  androidTestImplementation 'com.android.support:support-annotations:25.4.0'
+  androidTestImplementation 'com.android.support:support-annotations:26.1.0'
 }
